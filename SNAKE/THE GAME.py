@@ -6,7 +6,7 @@ from rgb import *
 from background import *
 
 
-fps = 25
+fps = 24
 
 pygame.init()
 pygame.display.set_caption('SNAKE')

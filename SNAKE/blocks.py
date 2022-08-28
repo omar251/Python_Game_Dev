@@ -1,3 +1,4 @@
+from turtle import delay
 import pygame
 from rgb import *
 class Blocks:
@@ -13,6 +14,8 @@ class Blocks:
         self.HY = y + h
         self.color = color
         self.display = display
+        self.OldX = x
+        self.OldY = y
         # pygame.draw.rect(canvas, color, (x, y, w, h))
     def move(self,dx,dy,last):
         keys = pygame.key.get_pressed()
@@ -38,6 +41,8 @@ class Blocks:
             dy = 0
             keypressed = "space"
             pause = True
+        self.OldX = self.X
+        self.OldY = self.Y
         self.X += dx
         self.Y += dy
 
@@ -63,7 +68,12 @@ class Blocks:
         # self.X = self.X + dx
         # self.Y = self.Y + yy
         print("  ")
-
+    def move_snake(self,father):
+        self.OldX = self.X
+        self.OldY = self.Y
+        self.X = father.OldX
+        self.Y = father.OldY
+        
          
     def is_eating(self,target, X, Y):
         if X < self.X + self.W and X + target.W > self.X and Y < self.Y+self.H \
@@ -75,13 +85,13 @@ and target.H + Y > self.Y:
             return True
         else:
             return False
-    def child(self,display):
-        child = Blocks(self.X-self.W, self.Y, self.W, self.H, self.color,display)
-        # snake.append(child)
-        return child
+    # def child(self,display):
+    #     child = Blocks(self.X-self.W, self.Y, self.W, self.H, self.color,display)
+    #     # snake.append(child)
+    #     return child
     def create_child(self,snake,display):
         father = snake[len(snake)-1]
-        snake.append(Blocks(father.X-father.W,father.Y,father.W,father.H,father.color,display))
+        snake.append(Blocks(father.OldX,father.OldY,father.W,father.H,rand_color(),display))
         return snake
     def draw_snake(self,display):
         display.fill(black)

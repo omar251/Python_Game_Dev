@@ -1,6 +1,7 @@
 from turtle import delay
 import pygame
 from rgb import *
+STEP=11
 class Blocks:
     
     def __init__(self, x, y, w, h, color,display):
@@ -17,23 +18,23 @@ class Blocks:
         self.OldX = x
         self.OldY = y
         # pygame.draw.rect(canvas, color, (x, y, w, h))
-    def move(self,dx,dy,last):
+    def move(self,dx,dy,last):                                      # motion originates from bottom right of screen
         keys = pygame.key.get_pressed()
         keypressed = last
         if keys[pygame.K_UP] and self.Y >= 3 and keypressed !="down":
             dx =  0
-            dy =  -10
+            dy =  -STEP
             keypressed = "up"
         elif keys[pygame.K_DOWN]and self.Y < (500-self.H) and keypressed !="up":
             dx =  0
-            dy =  10
+            dy =  STEP
             keypressed = "down"
         elif keys[pygame.K_RIGHT] and self.X < (500-self.W) and keypressed !="left":
-            dx =  10
+            dx =  STEP
             dy =  0
             keypressed = "right"
         elif keys[pygame.K_LEFT]and self.X >= 3 and keypressed !="right":
-            dx =  -10
+            dx =  -STEP
             dy =  0
             keypressed = "left"
         if keys[pygame.K_SPACE]:
@@ -47,28 +48,7 @@ class Blocks:
         self.Y += dy
 
         return dx,dy,keypressed
-    def move_child(self,x,y):
-        # self.X = x - dx*2
-        # self.Y = y - dy*2
-
-        xx = x - self.X
-        yy = y - self.Y
-        if xx > 25:
-            self.X = self.X + 25
-            self.Y = y
-        elif xx < -25:
-            self.X = self.X - 25
-            self.Y = y
-        elif yy > 25:
-            self.Y = self.Y + 25
-            self.X = x
-        elif yy < -25:
-            self.Y = self.Y - 25
-            self.X = x
-        # self.X = self.X + dx
-        # self.Y = self.Y + yy
-        print("  ")
-    def move_snake(self,father):
+    def move_snake(self,father):      #feedback loop fills the gaps out of IF ranges (no need to move by 25)
         self.OldX = self.X
         self.OldY = self.Y
         self.X = father.OldX
@@ -81,18 +61,28 @@ and target.H + Y > self.Y:
             return True
     
     def is_border(self):
-        if self.X == 0 or self.Y == (480) or self.X == (480) or self.Y ==0:
-            return True
-        else:
+        if 0 <= self.X <= (480) and 0 <= self.Y <= (480):
             return False
-    # def child(self,display):
-    #     child = Blocks(self.X-self.W, self.Y, self.W, self.H, self.color,display)
-    #     # snake.append(child)
-    #     return child
-    def create_child(self,snake,display):
+        else:
+            return True
+
+    def is_collide(self,snake,display):
+        collide=None
+        i=1
+        size = len(snake)-1
+        while size>0:
+            
+            if pygame.Rect.colliderect(pygame.draw.rect(display,snake[0].color,(snake[0].X,snake[0].Y,snake[0].W,snake[0].H)),pygame.draw.rect(display,snake[i].color,(snake[i].X,snake[i].Y,snake[i].W,snake[i].H))) :
+                return True
+            size-=1
+            i+=1    
+ 
+   
+    def create_child(self,snake,display):                                                  # [USED] prioratizes the background method varient 
         father = snake[len(snake)-1]
         snake.append(Blocks(father.OldX,father.OldY,father.W,father.H,rand_color(),display))
         return snake
+
     def draw_snake(self,display):
         display.fill(black)
         pygame.draw.rect(display, red, (self.X, self.Y, self.W, self.H))

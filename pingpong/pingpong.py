@@ -20,7 +20,7 @@ while brick_size > 0:
     next_row = create_bricks(dis,bricks,next_row)
     brick_size -=1
 ball = Ball(width/2,height/2,20,20,rand_color(),dis)
-racket = Racket(width/2,height-30,(width/3)+100,10,rand_color(),dis)
+racket = Racket(width/2,height-30,250,10,rand_color(),dis)
 racket.center_block(1,0)
 restart = True
 # ball.start_move() 

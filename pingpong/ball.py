@@ -31,16 +31,18 @@ class Ball(Blocks):
         if (self.right >= racket.left) and (self.left <= racket.right): 
             if (self.bottom == racket.top):
                 self.dy *= -1 
-                if racket.is_moving:            
+                if (racket.X + (racket.W/2)) - 20 <= (self.X + (self.W/2)) <=(racket.X + (racket.W/2)) +20 :
+                    self.dx = 0
+                    self.lastmove ="stop"
+                    print("center")
+                else:            
                     if racket.lastmove == "right":
                         self.dx = abs(self.ball_speed)
                         self.lastmove = racket.lastmove
                     elif racket.lastmove == "left": 
                         self.dx = -abs(self.ball_speed)
                         self.lastmove = racket.lastmove
-                else:
-                    self.dx = 0
-                    self.lastmove ="stop"
+                
 
                 self.score += 1        
 

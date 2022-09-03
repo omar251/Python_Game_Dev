@@ -5,6 +5,7 @@ class Racket(Blocks):
     Racket_speed = 10
     def __init__(self, x, y, w, h, color,display):
         super().__init__(x, y, w, h, color,display)
+        self.center = Blocks(self.X - 20,self.Y,40,10,green,self.display)
         self.lastmove=""
         self.is_moving = False
 
@@ -12,19 +13,21 @@ class Racket(Blocks):
         keys = pygame.key.get_pressed()
         keypressed=False
         if keys[pygame.K_RIGHT] and (self.lastmove !="right"):
-            self.dx =  self.Racket_speed
+            self.dx = self.center.dx =  self.Racket_speed
             self.lastmove  = "right"
             keypressed= True
             self.is_moving = True
         elif keys[pygame.K_LEFT] and (self.lastmove !="left"):
-            self.dx =  self.Racket_speed * -1
+            self.dx = self.center.dx =  self.Racket_speed * -1
             self.lastmove  = "left"
             keypressed= True
             self.is_moving = True
         elif self.left <= 0 or (self.right) >= (self.display.get_width()):
-            self.dx = 0
+            self.dx = self.center.dx = 0
             keypressed=False
             self.is_moving = False
         self.move_block()
+        self.center.move_block()
         self.draw_block()
+        self.center.draw_block()
         return keypressed

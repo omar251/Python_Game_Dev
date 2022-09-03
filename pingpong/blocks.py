@@ -1,4 +1,5 @@
 from turtle import delay
+from pygame import *
 import pygame
 from rgb import *
 class Blocks:
@@ -24,8 +25,8 @@ class Blocks:
         self.dy = 0 
         # print(self.top,self.right,self.left,self.bottom)
 
-    def draw_block(self,display):
-        pygame.draw.rect(display,self.color,(self.X,self.Y,self.W,self.H))
+    def draw_block(self):
+        pygame.draw.rect(self.display,self.color,(self.X,self.Y,self.W,self.H))
     
     def initial_block_move(self):
         self.dx,self.dy = self.randx,self.randy
@@ -49,8 +50,14 @@ class Blocks:
         if( self.top > obj ):                                         
             return True
         else:
-            return False      
-         
+            return False   
+
+    def is_collide(self,brick):            
+            if pygame.Rect.colliderect(Rect((self.X,self.Y,self.W,self.H)),Rect((brick.X,brick.Y,brick.W,brick.H))) :
+                return True
+            else:
+                return False
+     
 
 
 
